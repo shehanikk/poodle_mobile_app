@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:poodle_mobie_application/login_pages/login_page.dart';
+import 'package:poodle_mobie_application/login_pages/signin_page.dart';
 
 class Choose extends StatefulWidget {
   const Choose({Key? key}) : super(key: key);
@@ -43,7 +45,9 @@ class _ChooseState extends State<Choose> {
               Align(
                 alignment: AlignmentDirectional(0, -0.27),
                 child: ElevatedButton(
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                  },
                   child: const Text('LOGIN'),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(
@@ -69,7 +73,9 @@ class _ChooseState extends State<Choose> {
               Align(
                 alignment: AlignmentDirectional(0, -0.13),
                 child: ElevatedButton(
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+                  },
                   child: const Text('SIGN IN'),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(

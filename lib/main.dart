@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poodle_mobie_application/login_pages/choose_page.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
