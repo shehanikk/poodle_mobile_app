@@ -1,6 +1,11 @@
+
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:poodle_mobie_application/login_pages/login_page.dart';
+
+import '../main_pages/home_page.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -10,8 +15,13 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _emailTextController = TextEditingController();
+  TextEditingController _userNameTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
 
@@ -36,7 +46,7 @@ class _SignInState extends State<SignIn> {
             margin: const EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
-                SizedBox(height: 20,),
+                SizedBox(height: 30,),
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -50,6 +60,7 @@ class _SignInState extends State<SignIn> {
                       ]
                   ),
                   child: TextField(
+                    controller: _userNameTextController,
                     decoration: InputDecoration(
                       hintText: "Username",
                         prefixIcon: Icon(Icons.person, color: Colors.black,),
@@ -71,7 +82,7 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25,),
+                SizedBox(height: 30,),
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -85,6 +96,7 @@ class _SignInState extends State<SignIn> {
                       ]
                   ),
                   child: TextField(
+                    controller: _emailTextController,
                     decoration: InputDecoration(
                         hintText: "Email address",
                         prefixIcon: Icon(Icons.email, color: Colors.black,),
@@ -106,7 +118,8 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25,),
+                SizedBox(height: 30,),
+
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -120,41 +133,8 @@ class _SignInState extends State<SignIn> {
                       ]
                   ),
                   child: TextField(
-                    decoration: InputDecoration(
-                        hintText: "Phone number",
-                        prefixIcon: Icon(Icons.phone, color: Colors.black,),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                            )
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                            )
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)
-                        )
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25,),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            offset: Offset(1,1),
-                            color: Colors.grey.withOpacity(0.4)
-                        )
-                      ]
-                  ),
-                  child: TextField(
+                    controller: _passwordTextController,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: "Password",
                         prefixIcon: Icon(Icons.password, color: Colors.black,),
@@ -176,45 +156,20 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25,),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            offset: Offset(1,1),
-                            color: Colors.grey.withOpacity(0.4)
-                        )
-                      ]
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        hintText: "Confirm password",
-                        prefixIcon: Icon(Icons.password_sharp, color: Colors.black,),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                            )
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                            )
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)
-                        )
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25,),
+                SizedBox(height: 38,),
+
                 Container(
                   child: ElevatedButton(
-                    onPressed: () { },
+                    onPressed: () {
+                      FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailTextController.text,
+                          password: _passwordTextController.text).then((value){
+                        print("created new account");
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                      }).onError((error, stackTrace) {
+                        print("Error ${error.toString()}");
+                      });
+                    },
+
                     child: const Text('CREATE ACCOUNT'),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
@@ -237,7 +192,7 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40,),
+                SizedBox(height: 60,),
                 RichText(text: TextSpan(
                     text: "Already have an account?",
                     style: TextStyle(

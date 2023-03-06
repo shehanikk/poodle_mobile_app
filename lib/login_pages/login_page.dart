@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:poodle_mobie_application/login_pages/signin_page.dart';
+import 'package:poodle_mobie_application/main_pages/home_page.dart';
 
 
 
@@ -12,6 +14,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _emailTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -52,6 +57,7 @@ class _LoginState extends State<Login> {
                     ]
                   ),
                   child: TextField(
+                    controller: _emailTextController,
                     decoration: InputDecoration(
                         hintText: "Email address",
                         prefixIcon: Icon(Icons.email, color: Colors.black,),
@@ -87,6 +93,8 @@ class _LoginState extends State<Login> {
                       ]
                   ),
                   child: TextField(
+                    controller: _passwordTextController,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: "Password",
                         prefixIcon: Icon(Icons.password, color: Colors.black,),
@@ -127,7 +135,15 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 25,),
                 Container(
                   child: ElevatedButton(
-                    onPressed: () { },
+                    onPressed: () {
+                      FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailTextController.text,
+                          password: _passwordTextController.text).then((value) {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                      }).onError((error, stackTrace){
+                        print("Error ${error.toString()}");
+                      });
+
+                    },
                     child: const Text('LOGIN'),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
