@@ -1,11 +1,9 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:poodle_mobie_application/login_pages/login_page.dart';
+import 'package:poodle_mobie_application/main_pages/main_home.dart';
 
-import '../main_pages/home_page.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -164,7 +162,7 @@ class _SignInState extends State<SignIn> {
                       FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailTextController.text,
                           password: _passwordTextController.text).then((value){
                         print("created new account");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MainHome()));
                       }).onError((error, stackTrace) {
                         print("Error ${error.toString()}");
                       });
