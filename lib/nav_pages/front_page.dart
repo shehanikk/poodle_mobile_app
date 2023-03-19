@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
-import 'home_page.dart';
+import '../main_pages/home_page.dart';
 
-class MainHome extends StatefulWidget {
-  const MainHome({Key? key}) : super(key: key);
+class FrontPage extends StatefulWidget {
+  const FrontPage({Key? key}) : super(key: key);
 
   @override
-  State<MainHome> createState() => _MainHomeState();
+  State<FrontPage> createState() => _FrontPageState();
 }
 
-class _MainHomeState extends State<MainHome> {
+class _FrontPageState extends State<FrontPage> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -43,29 +42,6 @@ class _MainHomeState extends State<MainHome> {
         ],
         backgroundColor: Colors.white,
       ),
-
-      bottomNavigationBar: Container(
-        color: Color(0xFF072972),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 5 ),
-          child: GNav(
-            gap: 9,
-            backgroundColor: Color(0xFF072972),
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Color(0xFF64C251),
-            padding: EdgeInsets.all(16),
-            tabs: [
-              GButton(icon: Icons.home, text:'Home'),
-              GButton(icon: Icons.search_rounded, text: 'Search'),
-              GButton(icon: Icons.vaccines, text:'E-card'),
-              GButton(icon: Icons.settings_overscan, text:'Scan dog'),
-
-            ],
-          ),
-        ),
-      ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -84,7 +60,6 @@ class _MainHomeState extends State<MainHome> {
           ],
         ),
       ),
-
     );
   }
 }
