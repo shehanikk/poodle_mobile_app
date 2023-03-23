@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:poodle_mobie_application/login_pages/choose_page.dart';
 import 'package:poodle_mobie_application/main_pages/navigationbar.dart';
+import 'package:poodle_mobie_application/services/theme_services.dart';
+import 'package:poodle_mobie_application/ui_design/theme.dart';
 
 
 void main() async {
@@ -18,9 +21,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+
+
       // home: const Choose(),
       home: const  Mynavigationbar(),
     );

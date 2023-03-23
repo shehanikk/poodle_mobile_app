@@ -39,9 +39,15 @@ dependencies:
   google_nav_bar: ^5.0.6
   flutter_native_splash: ^2.2.18
   get: ^4.6.5
+  google_fonts:
   firebase_auth: ^4.2.9
   firebase_core: ^2.7.0
   custom_navigation_bar: ^0.8.2
+  get_storage:
+  intl:
+  date_picker_timeline:
+
+
 
 dev_dependencies:
   flutter_test:
