@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:poodle_mobie_application/controllers/task_controller.dart';
 import 'package:poodle_mobie_application/sub_pages/input_field.dart';
 import 'package:poodle_mobie_application/ui_design/theme.dart';
 import 'package:poodle_mobie_application/ui_design/widgets/button.dart';
+
+import '../model/task.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -12,6 +16,10 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  final TaskController _taskController = Get.put(TaskController());
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+
   DateTime _selectedDate = DateTime.now();
   String _endTime = "9.30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -51,8 +59,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
               Text("Add next vaccination details",
               style: headingStyle,
               ),
-              MyInputField(title: "Title", hint: "Enter title here"),
-              MyInputField(title: "Note", hint: "Enter note here"),
+              MyInputField(title: "Title", hint: "Enter title here", controller: _titleController,),
+              MyInputField(title: "Note", hint: "Enter note here", controller: _noteController,),
               MyInputField(title: "Date", hint: DateFormat.yMd().format(_selectedDate),
                 widget: IconButton(
                   icon: Icon(Icons.calendar_month_outlined,
@@ -147,7 +155,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _colorPallete(),
-                  MyButton(label: "Create Reminder", onTap: ()=>null)
+                  MyButton(label: "Create Reminder", onTap: ()=>_validateData())
                 ],
               )
             ],
@@ -155,6 +163,39 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
       )
     );
+  }
+
+  _validateData(){
+    if(_titleController.text.isNotEmpty&&_noteController.text.isNotEmpty){
+      _addTaskToDb();
+      Get.back();
+    }else if(_titleController.text.isEmpty||_noteController.text.isEmpty){
+      Get.snackbar("Required", "All fields are required !",
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.white,
+      colorText: Colors.black,
+      icon: Icon(Icons.warning_amber_rounded,
+      color: Colors.red
+      )
+      );
+    }
+  }
+
+  _addTaskToDb() async{
+    int value=await _taskController.addTask(
+        task:Task(
+          note: _noteController.text,
+          title: _titleController.text,
+          date: DateFormat.yMd().format(_selectedDate),
+          startTime: _startTime,
+          endTime: _endTime,
+          remind: _selectedRemind,
+          repeat: _selectedRepeat,
+          color: _selectedColor,
+          isCompleted: 0,
+        )
+    );
+    print("my id is"+"$value");
   }
 
   _colorPallete(){
