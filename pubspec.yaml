@@ -47,6 +47,9 @@ dependencies:
   intl:
   date_picker_timeline:
   sqflite:
+  flutter_local_notifications: ^9.6.0
+  flutter_staggered_animations:
+  flutter_native_timezone:
 
 
 
