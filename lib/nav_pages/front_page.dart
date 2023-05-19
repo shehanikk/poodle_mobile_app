@@ -108,16 +108,17 @@ class _FrontPageState extends State<FrontPage> {
                       shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                       itemCount: _donations.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 1.2),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 1.1),
                       itemBuilder: (_,index){
                         return Card(
                           elevation: 5,
+                          color: Color(0xFFEEEEEE),
                           child: Column(
                             children: [
-                             AspectRatio(aspectRatio: 1.3, child: Container( child: Image.network(_donations[index]["imgUrl"]))),
+                             AspectRatio(aspectRatio: 1.4, child: Container( child: Image.network(_donations[index]["imgUrl"]))),
                               SizedBox(height: 7,),
                               Text( "Name: ${_donations[index]["dogName"]}"),
-                              SizedBox(height: 5,),
+                              SizedBox(height: 7,),
                               Text("${_donations[index]["healthState"]}"),
                             ],
                           ),

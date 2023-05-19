@@ -51,6 +51,7 @@ dependencies:
   flutter_staggered_animations:
   flutter_native_timezone:
   cloud_firestore: ^4.7.0
+  image_picker:
 
 
 
