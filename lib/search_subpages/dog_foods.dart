@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:poodle_mobie_application/detailsShow_pages/dogFoodDetailPage.dart';
 
 class Dogfoods extends StatefulWidget {
   const Dogfoods({Key? key}) : super(key: key);
@@ -64,7 +65,14 @@ class _DogfoodsState extends State<Dogfoods> {
                     itemCount: _addvertisments.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 0.9),
                     itemBuilder: (_,index){
-                      return Card(
+                      return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DogFoodDetailPage(addvertisments: _addvertisments[index],
+                            ),
+                            ),
+                            );
+                          },
+                      child: Card(
                         elevation: 5,
                         color: Color(0xFFEEEEEE),
                         margin: EdgeInsets.all(25),
@@ -79,6 +87,7 @@ class _DogfoodsState extends State<Dogfoods> {
                             Text("Price: ${_addvertisments[index]["addPrice"]}"),
                           ],
                         ),
+                      ),
                       );
                     }),
               ),

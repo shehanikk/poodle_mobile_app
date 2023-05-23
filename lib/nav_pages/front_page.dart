@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:poodle_mobie_application/detailsShow_pages/donationDetailsPage.dart';
 import '../main_pages/home_page.dart';
 
 class FrontPage extends StatefulWidget {
@@ -110,7 +111,14 @@ class _FrontPageState extends State<FrontPage> {
                       itemCount: _donations.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 1.1),
                       itemBuilder: (_,index){
-                        return Card(
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donation: _donations[index],
+                            ),
+                            ),
+                            );
+                          },
+                        child: Card(
                           elevation: 5,
                           color: Color(0xFFEEEEEE),
                           child: Column(
@@ -122,6 +130,7 @@ class _FrontPageState extends State<FrontPage> {
                               Text("${_donations[index]["healthState"]}"),
                             ],
                           ),
+                        ),
                         );
                   }),
               ),

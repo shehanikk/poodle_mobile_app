@@ -17,6 +17,7 @@ class _ScaneState extends State<Scane> {
   final picker = ImagePicker();
   var image;
   File? _image;
+  dynamic _output;
 
 
 
@@ -47,6 +48,10 @@ class _ScaneState extends State<Scane> {
       final responseBody = await response.stream.bytesToString();
       var resJson = convert.jsonDecode(responseBody);
       print(resJson.toString());
+
+      setState(() {
+        _output = resJson;
+      });
     }
   }
 
@@ -77,6 +82,10 @@ class _ScaneState extends State<Scane> {
       final responseBody = await response.stream.bytesToString();
       var resJson = convert.jsonDecode(responseBody);
       print(resJson.toString());
+
+      setState(() {
+        _output = resJson;
+      });
     }
   }
 
@@ -169,13 +178,23 @@ class _ScaneState extends State<Scane> {
               ),
             ),
             Container(
+              child: Text(
+                _output.toString(),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+                ),
+              ),
+            ),
+            Container(
               child: Row(
                 children: [
                   OutlinedButton(onPressed: () async {
                     await callAPICamera();
                   }, child: null),
                   OutlinedButton(onPressed: () async {
-                    await callAPICamera();
+                    await callAPIGallery();
                   }, child: null),
                 ],
               ),

@@ -2,6 +2,8 @@ import 'package:date_picker_timeline/extra/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class DogCreate extends StatefulWidget {
   const DogCreate({Key? key}) : super(key: key);
@@ -17,6 +19,69 @@ class _DogCreateState extends State<DogCreate> {
   TextEditingController dogBirthDayController = TextEditingController();
   TextEditingController dogBreedController = TextEditingController();
   TextEditingController dogSexController = TextEditingController();
+
+  Future<void> createDogAccount() async {
+    final dogDetails = {
+      'email': emailController.text,
+      'dogName': dogNameController.text,
+      'dogBirthDay': dogBirthDayController.text,
+      'dogBreed': dogBreedController.text,
+      'dogSex': dogSexController.text,
+    };
+
+    try {
+      // Access Firestore instance
+      final firestore = FirebaseFirestore.instance;
+
+      // Add dog details to Firestore
+      await firestore.collection('dogs').add(dogDetails);
+
+      // Show success message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Success'),
+            content: Text('Dog details added to Firestore'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      ).then((_) {
+        // Clear text fields after successful submission
+        emailController.clear();
+        dogNameController.clear();
+        dogBirthDayController.clear();
+        dogBreedController.clear();
+        dogSexController.clear();
+      });
+    } catch (e) {
+      // Show error message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to add dog details to Firestore'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +181,7 @@ class _DogCreateState extends State<DogCreate> {
             borderRadius: BorderRadius.circular(8)
           ),
           child: TextField(
+            controller: controller,
             cursorHeight: 30,
             cursorColor: Colors.blue,
             cursorWidth: 2,
@@ -146,7 +212,7 @@ class _DogCreateState extends State<DogCreate> {
           borderRadius: BorderRadius.circular(5)
       ),
       color: Colors.green,
-      onPressed: () => onPressed(),
+      onPressed: () => createDogAccount(),
       child: Text(
         title,
         style: GoogleFonts.poppins(
