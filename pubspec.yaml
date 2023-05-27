@@ -52,6 +52,7 @@ dependencies:
   flutter_native_timezone:
   cloud_firestore: ^4.7.0
   image_picker:
+  firebase_storage: ^11.2.1
 
 
 

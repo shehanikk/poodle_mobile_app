@@ -27,11 +27,13 @@ class _ScaneState extends State<Scane> {
     //final image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image ==  null)  return;
 
+    //setting image to image file path
     final imageTemp = File(image.path);
 
     setState(() => _image=imageTemp);
 
     var url = Uri.parse('http://192.168.43.15:8080/recognize_breed');
+    //request equale to post method and url
     var request = http.MultipartRequest('POST', url);
     if (_image != null) {
       var bytes = await _image!.readAsBytes();
@@ -65,7 +67,7 @@ class _ScaneState extends State<Scane> {
 
     setState(() => _image=imageTemp);
 
-    var url = Uri.parse('http://192.168.43.15:8080/recognize_breed');
+    var url = Uri.parse('http://192.168.137.1:8080/recognize_breed');
     var request = http.MultipartRequest('POST', url);
     if (_image != null) {
       var bytes = await _image!.readAsBytes();
@@ -95,116 +97,109 @@ class _ScaneState extends State<Scane> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color(0xFF072972),
+      backgroundColor: Colors.white,
 
-        body: Column(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Color(0xFF072972),
+        centerTitle: true,
+        title: Text('SCAN YOUR DOG'),
+      ),
+
+      body: Center(
+        child: Column(
+
           children: [
-            // _image == null ? Image.asset("assets/ai_topim.png") :
-            // Positioned(
-            //
-            //   child: (
-            //       Image.file(_image!,height: 200,width: 200,fit: BoxFit.cover,)
-            //   ),
-            // ),
-            // Positioned(
-            // height: size.height*0.4,
-            //               width: size.width,
-            //
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //         image: DecorationImage(
-            //           image: AssetImage("assets/ai_topim.png"),
-            //
-            //         )
-            //     ),
-            //   ),
-            // ),
-            //
-            // Positioned(
-            //   top: size.height*0.35,
-            //   height: size.height*0.65,
-            //   width: size.width,
-            //
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //         color: Colors.white,
-            //         borderRadius: BorderRadius.only(
-            //           topLeft: Radius.circular(36.0),
-            //           topRight: Radius.circular(36.0),
-            //         )
-            //     ),
-            //     child: Column(
-            //       children: [
-            //         SizedBox(height: 80,),
-            //         Text("Prediction", style:
-            //         TextStyle(
-            //           fontSize: 40,
-            //           fontWeight: FontWeight.bold,
-            //         ),),
-            //         SizedBox(height: 10,),
-            //         Text(
-            //          "Shitzu",
-            //           style: TextStyle(
-            //             fontSize: 20,
-            //             color: Colors.green,
-            //             fontWeight: FontWeight.bold,
-            //           ),),
-            //         SizedBox(height: 90,),
-            //         Row(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             OutlinedButton(onPressed: () async {
-            //              await callAPICamera();
-            //             }, child: null, ),
-            //
-            //             SizedBox(width: 60,),
-            //             OutlinedButton(onPressed: () async{
-            //               await callAPIGallery();
-            //
-            //             }, child: null,),
-            //           ],
-            //
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            _image == null ? Image.asset("assets/ai_topim.png") :
+            _image == null
+                ? Image.asset('assets/ai_topui.png') :
             ClipRRect(
-
               child: (
-
-                  Image.file(_image!,height: 200,width: 200,fit: BoxFit.cover,)
+                  Image.file(_image!,height: 400,width: 400, fit: BoxFit.cover,)
               ),
             ),
+            SizedBox(height: 40,),
             Container(
               child: Text(
                 _output.toString(),
                 style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87
                 ),
               ),
             ),
-            Container(
-              child: Row(
-                children: [
-                  OutlinedButton(onPressed: () async {
-                    await callAPICamera();
-                  }, child: null),
-                  OutlinedButton(onPressed: () async {
-                    await callAPIGallery();
-                  }, child: null),
-                ],
-              ),
-            )
-          ]
 
+            SizedBox(height: 90,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+
+
+                Container(
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 0,
+                    borderRadius: BorderRadius.circular(50),
+
+                    child: InkWell(
+                      splashColor: Colors.black26,
+                      onTap: ()  async {
+                        await callAPICamera();
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Ink.image(
+                            image: const AssetImage(
+                                "assets/camera_button.png"
+                            ),
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 0,
+                    borderRadius: BorderRadius.circular(50),
+
+                    child: InkWell(
+                      splashColor: Colors.black26,
+                      onTap: ()  {
+                        callAPIGallery();
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Ink.image(
+                            image: const AssetImage(
+                                "assets/gallery_button.png"
+                            ),
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
+
+      ),
+
     );
   }
 }
+
 
 
 

@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:poodle_mobie_application/login_pages/login_page.dart';
 import 'package:poodle_mobie_application/main_pages/navigationbar.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -16,6 +16,25 @@ class _SignInState extends State<SignIn> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
+
+
+  void saveUsernameToFirebase() {
+    String username = _userNameTextController.text;
+    String email = _emailTextController.text;
+
+    FirebaseFirestore.instance
+        .collection('userDog')
+        .doc(email)
+        .set({'username': username, 'emial': email})
+        .then((_) {
+      print('Username saved to Firebase: $username');
+    })
+        .catchError((error) {
+      print('Failed to save username to Firebase: $error');
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +185,7 @@ class _SignInState extends State<SignIn> {
                       }).onError((error, stackTrace) {
                         print("Error ${error.toString()}");
                       });
+                      saveUsernameToFirebase();
                     },
 
                     child: const Text('CREATE ACCOUNT'),

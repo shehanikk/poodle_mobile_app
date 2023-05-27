@@ -51,6 +51,14 @@ class _DonationDetailsPageState extends State<DonationDetailsPage> {
             ),),
           ),
 
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // TODO: Implement PayPal integration here
+            },
+            child: Text('Pay with PayPal'),
+          ),
+
         ],
       ),
     );

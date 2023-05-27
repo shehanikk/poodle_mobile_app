@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:date_picker_timeline/extra/color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
 class DogCreate extends StatefulWidget {
@@ -14,11 +19,61 @@ class DogCreate extends StatefulWidget {
 
 class _DogCreateState extends State<DogCreate> {
 
+  XFile? imageFile;
+
+  String? email;
+
+  String? getUserEmail() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      return user.email;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    email = getUserEmail();
+    emailController.text = FirebaseAuth.instance.currentUser?.email ?? '';
+  }
+
   TextEditingController emailController = TextEditingController();
   TextEditingController dogNameController = TextEditingController();
   TextEditingController dogBirthDayController = TextEditingController();
   TextEditingController dogBreedController = TextEditingController();
   TextEditingController dogSexController = TextEditingController();
+
+  Future<void> _selectImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? selectedImage = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      imageFile = selectedImage;
+    });
+  }
+
+  Future<String> uploadImage(XFile imageFile) async {
+    try {
+      // Access Firebase Storage instance
+      final storage = firebase_storage.FirebaseStorage.instance;
+
+      // Create a unique filename for the image
+      final fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
+
+      // Upload the image to Firebase Storage
+      final task = await storage.ref().child(fileName).putFile(File(imageFile.path));
+
+      // Get the download URL of the uploaded image
+      final imageUrl = await task.ref.getDownloadURL();
+
+      return imageUrl;
+    } catch (e) {
+      // Handle any errors that occur during image upload
+      print('Error uploading image: $e');
+      throw e;
+    }
+  }
 
   Future<void> createDogAccount() async {
     final dogDetails = {
@@ -33,8 +88,26 @@ class _DogCreateState extends State<DogCreate> {
       // Access Firestore instance
       final firestore = FirebaseFirestore.instance;
 
+      if (imageFile != null) {
+        final String imageUrl = await uploadImage(imageFile!);
+        dogDetails['imageUrl'] = imageUrl;
+      }
+
+      final dogRef = await firestore.collection('userDog').doc(email).collection('dog').doc(dogNameController.text).set(dogDetails);
+
+      // Retrieve the document ID of the newly created dog
+      // final dogId = dogRef.id;
+
+      // Update the dog document with the image URL
+      if (imageFile != null) {
+        await firestore.collection('userDog').doc(email).collection('dog').doc(dogNameController.text).update({
+          'imageUrl': dogDetails['imageUrl'],
+        });
+      }
+
+
       // Add dog details to Firestore
-      await firestore.collection('dogs').add(dogDetails);
+     // await firestore.collection('userDog').doc(uid).collection('dog').add(dogDetails);
 
       // Show success message
       showDialog(
@@ -54,7 +127,7 @@ class _DogCreateState extends State<DogCreate> {
           );
         },
       ).then((_) {
-        // Clear text fields after successful submission
+
         emailController.clear();
         dogNameController.clear();
         dogBirthDayController.clear();
@@ -113,7 +186,11 @@ class _DogCreateState extends State<DogCreate> {
                         shape: BoxShape.circle,
                         color: Color(0xffD6D6D6)
                       ),
-                      child: Center(child: Icon(Icons.camera_alt_outlined, size: 40, color: Colors.white,),),
+                      //child: Center(child: Icon(Icons.camera_alt_outlined, size: 40, color: Colors.white,),),
+                      child: IconButton(
+                        icon: Icon(Icons.camera_alt_outlined, size: 40, color: Colors.white),
+                        onPressed: _selectImage,
+                      ),
                     ),
                   )
                 ],
@@ -128,7 +205,7 @@ class _DogCreateState extends State<DogCreate> {
               padding: EdgeInsets.symmetric(horizontal: 23),
               child: Column(
                 children: [
-                  TextFieldWidget('Email Address',Icons.email_rounded,emailController),
+                  TextFieldWidget('Email',Icons.email_rounded,emailController),
                   const SizedBox(
                     height: 20,
                   ),

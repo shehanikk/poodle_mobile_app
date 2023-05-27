@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:poodle_mobie_application/detailsShow_pages/doggieDetailPage.dart';
 import 'package:poodle_mobie_application/detailsShow_pages/donationDetailsPage.dart';
 import '../main_pages/home_page.dart';
 
@@ -113,8 +114,7 @@ class _FrontPageState extends State<FrontPage> {
                       itemBuilder: (_,index){
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donation: _donations[index],
-                            ),
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donation: _donations[index]),
                             ),
                             );
                           },
