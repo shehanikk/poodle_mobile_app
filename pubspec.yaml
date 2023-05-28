@@ -53,6 +53,7 @@ dependencies:
   cloud_firestore: ^4.7.0
   image_picker:
   firebase_storage: ^11.2.1
+  flutter_paypal_checkout: ^1.0.1
 
 
 

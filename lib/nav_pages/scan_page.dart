@@ -32,7 +32,7 @@ class _ScaneState extends State<Scane> {
 
     setState(() => _image=imageTemp);
 
-    var url = Uri.parse('http://192.168.43.15:8080/recognize_breed');
+    var url = Uri.parse('http://10.5.6.18:8080/recognize_breed');
     //request equale to post method and url
     var request = http.MultipartRequest('POST', url);
     if (_image != null) {
@@ -67,7 +67,7 @@ class _ScaneState extends State<Scane> {
 
     setState(() => _image=imageTemp);
 
-    var url = Uri.parse('http://192.168.137.1:8080/recognize_breed');
+    var url = Uri.parse('http://10.5.6.18:8080/recognize_breed');
     var request = http.MultipartRequest('POST', url);
     if (_image != null) {
       var bytes = await _image!.readAsBytes();
@@ -170,8 +170,8 @@ class _ScaneState extends State<Scane> {
 
                     child: InkWell(
                       splashColor: Colors.black26,
-                      onTap: ()  {
-                        callAPIGallery();
+                      onTap: () async {
+                        await callAPIGallery();
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
