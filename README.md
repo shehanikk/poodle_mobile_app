@@ -13,10 +13,6 @@ Watch the demo video below:
 
 
 
-
-
-
-
 ## Functionality
 
 #### Online Dog Vaccination System:
